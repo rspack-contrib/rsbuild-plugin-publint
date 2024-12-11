@@ -1,6 +1,6 @@
 # rsbuild-plugin-publint
 
-Use [publint](https://github.com/bluwy/publint) to lint npm packages after build.
+Use [publint](https://github.com/bluwy/publint) to lint npm packages after the build.
 
 <p>
   <a href="https://npmjs.com/package/rsbuild-plugin-publint">
@@ -12,9 +12,9 @@ Use [publint](https://github.com/bluwy/publint) to lint npm packages after build
 
 ## Preview
 
-`rsbuild-plugin-publint` is the perfect partner for [Rslib](https://github.com/web-infra-dev/rslib). When building a library, publint helps you identify and fix problematic fields in your package.json.
+`rsbuild-plugin-publint` is the perfect partner for [Rslib](https://github.com/web-infra-dev/rslib). When building a library, publint helps you to lint the npm package and give suggestions to improve its compatibility with different environments.
 
-![Preview](https://github.com/user-attachments/assets/05021714-0c4d-489c-a029-672fca3371b6)
+![Preview](https://github.com/user-attachments/assets/bb6940df-ab15-4155-bdf5-03b7bae5458f)
 
 ## Usage
 
