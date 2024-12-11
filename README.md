@@ -1,6 +1,6 @@
 # rsbuild-plugin-publint
 
-Use [publint](https://github.com/bluwy/publint) to lint npm packages after the build.
+Run [publint](https://github.com/bluwy/publint) to lint npm packages after the build.
 
 <p>
   <a href="https://npmjs.com/package/rsbuild-plugin-publint">
