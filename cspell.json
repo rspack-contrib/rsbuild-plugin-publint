@@ -1,11 +1,9 @@
 {
-    "version": "0.2",
-    "ignorePaths": [],
-    "dictionaryDefinitions": [],
-    "dictionaries": [],
-    "words": [
-        "publint"
-    ],
-    "ignoreWords": [],
-    "import": []
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": ["publint"],
+  "ignoreWords": [],
+  "import": []
 }
