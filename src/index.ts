@@ -6,6 +6,11 @@ import type { Options } from 'publint';
 
 export type PluginPublintOptions = {
   /**
+   * Whether to enable publint.
+   * @default true
+   */
+  enable?: boolean;
+  /**
    * Options for publint.
    * @see https://github.com/bluwy/publint/blob/master/pkg/README.md#api
    */
@@ -18,6 +23,12 @@ export const pluginPublint = (
   name: 'plugin-publint',
 
   setup(api) {
+    const { enable = true } = options;
+
+    if (!enable) {
+      return;
+    }
+
     api.onAfterBuild(async () => {
       const { publint } = await import('publint');
       const { formatMessage } = await import('publint/utils');
