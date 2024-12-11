@@ -2,8 +2,7 @@ import fs from 'node:fs/promises';
 import { join } from 'node:path';
 import { type RsbuildPlugin, logger } from '@rsbuild/core';
 import color from 'picocolors';
-import { type Options, publint } from 'publint';
-import { formatMessage } from 'publint/utils';
+import type { Options } from 'publint';
 
 export type PluginPublintOptions = {
   /**
@@ -20,6 +19,9 @@ export const pluginPublint = (
 
   setup(api) {
     api.onAfterBuild(async () => {
+      const { publint } = await import('publint');
+      const { formatMessage } = await import('publint/utils');
+
       const mergedOptions = {
         pkgDir: api.context.rootPath,
         ...options.publintOptions,
