@@ -1,8 +1,9 @@
-import { logger, type RsbuildPlugin } from '@rsbuild/core';
-import { publint, type Options } from 'publint';
-import { formatMessage } from 'publint/utils';
 import fs from 'node:fs/promises';
 import { join } from 'node:path';
+import { type RsbuildPlugin, logger } from '@rsbuild/core';
+import { type Options, publint } from 'publint';
+import { formatMessage } from 'publint/utils';
+import color from 'picocolors';
 
 export type PluginPublintOptions = {
   /**
@@ -29,18 +30,74 @@ export const pluginPublint = (
         await fs.readFile(join(mergedOptions.pkgDir, 'package.json'), 'utf8'),
       );
 
-      let hasError = false;
+      const formatted: Record<string, (string | undefined)[]> = {
+        errors: [],
+        warnings: [],
+        suggestions: [],
+      };
 
       for (const message of messages) {
         if (message.type === 'error') {
-          logger.error(`[publint] ${formatMessage(message, pkg)}`);
-          hasError = true;
+          formatted.errors.push(formatMessage(message, pkg));
+        } else if (message.type === 'warning') {
+          formatted.warnings.push(formatMessage(message, pkg));
         } else {
-          logger.warn(`[publint] ${formatMessage(message, pkg)}`);
+          formatted.suggestions.push(formatMessage(message, pkg));
         }
       }
 
-      if (hasError) {
+      if (
+        formatted.errors.length === 0 &&
+        formatted.warnings.length === 0 &&
+        formatted.suggestions.length === 0
+      ) {
+        logger.info(color.green('Publint passed.'));
+      }
+
+      if (formatted.errors.length > 0) {
+        logger.error(
+          color.red(
+            `Publint found ${color.bold(formatted.errors.length)} errors:`,
+          ),
+        );
+        for (const message of formatted.errors) {
+          if (message) {
+            logger.error(message);
+          }
+        }
+        // empty line
+        console.log();
+      }
+
+      if (formatted.warnings.length > 0) {
+        logger.warn(
+          color.yellow(
+            `Publint found ${color.bold(formatted.warnings.length)} warnings:`,
+          ),
+        );
+        for (const message of formatted.warnings) {
+          if (message) {
+            logger.warn(message);
+          }
+        }
+        // empty line
+        console.log();
+      }
+
+      if (formatted.suggestions.length > 0) {
+        logger.info(
+          color.cyan(
+            `Publint found ${color.bold(formatted.suggestions.length)} suggestions:`,
+          ),
+        );
+        for (const message of formatted.suggestions) {
+          if (message) {
+            logger.info(message);
+          }
+        }
+      }
+
+      if (formatted.errors.length > 0) {
         process.exit(1);
       }
     });

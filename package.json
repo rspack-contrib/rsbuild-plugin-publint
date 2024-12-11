@@ -14,7 +14,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rslib build",
     "bump": "npx bumpp",
@@ -28,6 +30,7 @@
     "pre-commit": "npm run lint:write"
   },
   "dependencies": {
+    "picocolors": "^1.1.1",
     "publint": "^0.2.12"
   },
   "devDependencies": {
