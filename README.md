@@ -27,7 +27,7 @@ npm add rsbuild-plugin-publint -D
 Add plugin to your `rsbuild.config.ts`:
 
 ```ts
-// rsbuild.config.ts
+// `rslib.config.ts` or `rsbuild.config.ts`
 import { pluginPublint } from "rsbuild-plugin-publint";
 
 export default {
@@ -39,7 +39,7 @@ export default {
 
 ### publintOptions
 
-Options for publint.
+Options for publint. See [publint - API](https://github.com/bluwy/publint/blob/master/pkg/README.md#api) for more details.
 
 - Type: `import('publint').Options`
 - Default:
@@ -55,9 +55,7 @@ const defaultOptions = {
 ```js
 pluginPublint({
   publintOptions: {
-    rules: {
-      level: "error",
-    },
+    level: "error",
   },
 });
 ```
