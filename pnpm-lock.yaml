@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
       publint:
         specifier: ^0.2.12
         version: 0.2.12
@@ -27,9 +30,6 @@ importers:
       '@types/node':
         specifier: ^22.10.1
         version: 22.10.1
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
       playwright:
         specifier: ^1.49.0
         version: 1.49.0

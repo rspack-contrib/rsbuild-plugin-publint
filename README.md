@@ -31,17 +31,28 @@ export default {
 
 ## Options
 
-### foo
+### publintOptions
 
-Some description.
+Options for publint.
 
-- Type: `string`
-- Default: `undefined`
+- Type: `import('publint').Options`
+- Default:
+
+```js
+const defaultOptions = {
+  pkgDir: api.context.rootPath,
+};
+```
+
 - Example:
 
 ```js
 pluginPublint({
-  foo: "bar",
+  publintOptions: {
+    rules: {
+      level: "error",
+    },
+  },
 });
 ```
 
