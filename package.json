@@ -1,7 +1,7 @@
 {
-  "name": "rsbuild-plugin-example",
+  "name": "rsbuild-plugin-publint",
   "version": "0.0.0",
-  "repository": "https://github.com/rspack-contrib/rsbuild-plugin-template",
+  "repository": "https://github.com/rspack-contrib/rsbuild-plugin-publint",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -14,18 +14,23 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rslib build",
+    "bump": "npx bumpp",
     "dev": "rslib build --watch",
     "lint": "biome check .",
     "lint:write": "biome check . --write",
     "prepare": "simple-git-hooks && npm run build",
-    "test": "playwright test",
-    "bump": "npx bumpp"
+    "test": "playwright test"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run lint:write"
+  },
+  "dependencies": {
+    "publint": "^0.2.12"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
