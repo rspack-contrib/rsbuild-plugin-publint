@@ -10,6 +10,10 @@ Use [publint](https://github.com/bluwy/publint) to lint npm packages after build
   <a href="https://npmcharts.com/compare/rsbuild-plugin-publint?minimal=true"><img src="https://img.shields.io/npm/dm/rsbuild-plugin-publint.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
 </p>
 
+## Preview
+
+![Artboard](https://github.com/user-attachments/assets/05021714-0c4d-489c-a029-672fca3371b6)
+
 ## Usage
 
 Install:
