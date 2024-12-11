@@ -1,9 +1,9 @@
 import fs from 'node:fs/promises';
 import { join } from 'node:path';
 import { type RsbuildPlugin, logger } from '@rsbuild/core';
+import color from 'picocolors';
 import { type Options, publint } from 'publint';
 import { formatMessage } from 'publint/utils';
-import color from 'picocolors';
 
 export type PluginPublintOptions = {
   /**
