@@ -68,3 +68,18 @@ test('should allow to pass publint options', async () => {
 
   restore();
 });
+
+test('should allow to disable publint', async () => {
+  const rsbuild = await createRsbuild({
+    cwd: __dirname,
+    rsbuildConfig: {
+      plugins: [
+        pluginPublint({
+          enable: false,
+        }),
+      ],
+    },
+  });
+
+  await expect(rsbuild.build()).resolves.toBeTruthy();
+});

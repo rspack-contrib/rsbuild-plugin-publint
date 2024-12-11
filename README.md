@@ -24,10 +24,9 @@ Install:
 npm add rsbuild-plugin-publint -D
 ```
 
-Add plugin to your `rsbuild.config.ts`:
+Add plugin to your `rslib.config.ts` or `rsbuild.config.ts`:
 
 ```ts
-// `rslib.config.ts` or `rsbuild.config.ts`
 import { pluginPublint } from "rsbuild-plugin-publint";
 
 export default {
@@ -36,6 +35,21 @@ export default {
 ```
 
 ## Options
+
+### enable
+
+Whether to enable publint.
+
+- Type: `boolean`
+- Default: `true`
+
+For example, only run publint in the CI environment:
+
+```ts
+pluginPublint({
+  enable: Boolean(process.env.CI),
+});
+```
 
 ### publintOptions
 
