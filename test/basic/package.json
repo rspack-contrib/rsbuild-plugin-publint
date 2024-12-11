@@ -1,0 +1,14 @@
+{
+  "name": "invalid-package-a",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:test/test.git"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}

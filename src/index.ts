@@ -100,7 +100,7 @@ export const pluginPublint = (
       }
 
       if (formatted.errors.length > 0) {
-        process.exit(1);
+        throw new Error('Publint failed!');
       }
     });
   },

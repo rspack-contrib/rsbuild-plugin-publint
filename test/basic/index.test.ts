@@ -1,32 +1,23 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 import { createRsbuild } from '@rsbuild/core';
 import { pluginPublint } from '../../src';
-import { getRandomPort } from '../helper';
+import { proxyConsole } from '../helper';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const getPublintLogs = (logs: string[]) => {
+  const result: string[] = [];
 
-test('should render page as expected', async ({ page }) => {
-  const rsbuild = await createRsbuild({
-    cwd: __dirname,
-    rsbuildConfig: {
-      plugins: [pluginPublint()],
-      server: {
-        port: getRandomPort(),
-      },
-    },
-  });
+  for (const log of logs) {
+    if (log && (log.includes('Publint') || result.length > 0)) {
+      result.push(stripAnsi(log));
+    }
+  }
+  return result;
+};
 
-  const { server, urls } = await rsbuild.startDevServer();
+test('should run publint as expected', async ({ page }) => {
+  const { logs, restore } = proxyConsole();
 
-  await page.goto(urls[0]);
-  expect(await page.evaluate('window.test')).toBe(1);
-
-  await server.close();
-});
-
-test('should build succeed', async ({ page }) => {
   const rsbuild = await createRsbuild({
     cwd: __dirname,
     rsbuildConfig: {
@@ -34,11 +25,18 @@ test('should build succeed', async ({ page }) => {
     },
   });
 
-  await rsbuild.build();
-  const { server, urls } = await rsbuild.preview();
+  await expect(rsbuild.build()).rejects.toThrowError('Publint failed!');
 
-  await page.goto(urls[0]);
-  expect(await page.evaluate('window.test')).toBe(1);
+  expect(getPublintLogs(logs)).toEqual([
+    'error   Publint found 3 errors:',
+    'error   pkg.exports["."].types should be the first in the object as required by TypeScript.',
+    'error   pkg.exports["."].import is ./dist/index.js but the file does not exist.',
+    'error   pkg.exports["."].types is ./dist/index.d.ts but the file does not exist.',
+    'warn    Publint found 1 warnings:',
+    `warn    pkg.repository.url is git@github.com:test/test.git which isn't a valid git URL. A valid git URL is usually in the form of "git+https://example.com/user/repo.git".`,
+    'info    Publint found 1 suggestions:',
+    'info    The package does not specify the "type" field. NodeJS may attempt to detect the package type causing a small performance hit. Consider adding "type": "commonjs".',
+  ]);
 
-  await server.close();
+  restore();
 });
