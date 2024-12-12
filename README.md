@@ -74,6 +74,27 @@ pluginPublint({
 });
 ```
 
+### throwOn
+
+Specify when to throw an error based on message severity.
+
+- Type: `'error' | 'warning' | 'suggestion' | 'never'`
+- Default: `'error'`
+- Example:
+
+```ts
+pluginPublint({
+  throwOn: "warning",
+});
+```
+
+Optional values:
+
+- `'error'`: Only throw on errors.
+- `'warning'`: Throw on errors and warnings.
+- `'suggestion'`: Throw on errors, warnings and suggestions.
+- `'never'`: Never throw an error.
+
 ## License
 
 [MIT](./LICENSE).

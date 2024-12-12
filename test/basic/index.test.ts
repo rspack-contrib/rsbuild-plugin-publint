@@ -15,6 +15,17 @@ const getPublintLogs = (logs: string[]) => {
   return result;
 };
 
+const allLogs = [
+  'error   Publint found 3 errors:',
+  'error   pkg.exports["."].types should be the first in the object as required by TypeScript.',
+  'error   pkg.exports["."].import is ./dist/index.js but the file does not exist.',
+  'error   pkg.exports["."].types is ./dist/index.d.ts but the file does not exist.',
+  'warn    Publint found 1 warnings:',
+  `warn    pkg.repository.url is git@github.com:test/test.git which isn't a valid git URL. A valid git URL is usually in the form of "git+https://example.com/user/repo.git".`,
+  'info    Publint found 1 suggestions:',
+  'info    The package does not specify the "type" field. NodeJS may attempt to detect the package type causing a small performance hit. Consider adding "type": "commonjs".',
+];
+
 test('should run publint as expected', async () => {
   const { logs, restore } = proxyConsole();
 
@@ -27,17 +38,7 @@ test('should run publint as expected', async () => {
 
   await expect(rsbuild.build()).rejects.toThrowError('Publint failed!');
 
-  expect(getPublintLogs(logs)).toEqual([
-    'error   Publint found 3 errors:',
-    'error   pkg.exports["."].types should be the first in the object as required by TypeScript.',
-    'error   pkg.exports["."].import is ./dist/index.js but the file does not exist.',
-    'error   pkg.exports["."].types is ./dist/index.d.ts but the file does not exist.',
-    'warn    Publint found 1 warnings:',
-    `warn    pkg.repository.url is git@github.com:test/test.git which isn't a valid git URL. A valid git URL is usually in the form of "git+https://example.com/user/repo.git".`,
-    'info    Publint found 1 suggestions:',
-    'info    The package does not specify the "type" field. NodeJS may attempt to detect the package type causing a small performance hit. Consider adding "type": "commonjs".',
-  ]);
-
+  expect(getPublintLogs(logs)).toEqual(allLogs);
   restore();
 });
 
@@ -59,13 +60,7 @@ test('should allow to pass publint options', async () => {
 
   await expect(rsbuild.build()).rejects.toThrowError('Publint failed!');
 
-  expect(getPublintLogs(logs)).toEqual([
-    'error   Publint found 3 errors:',
-    'error   pkg.exports["."].types should be the first in the object as required by TypeScript.',
-    'error   pkg.exports["."].import is ./dist/index.js but the file does not exist.',
-    'error   pkg.exports["."].types is ./dist/index.d.ts but the file does not exist.',
-  ]);
-
+  expect(getPublintLogs(logs)).toEqual(allLogs.slice(0, 4));
   restore();
 });
 
@@ -82,4 +77,23 @@ test('should allow to disable publint', async () => {
   });
 
   await expect(rsbuild.build()).resolves.toBeTruthy();
+});
+
+test('should allow to disable throw', async () => {
+  const { logs, restore } = proxyConsole();
+  const rsbuild = await createRsbuild({
+    cwd: __dirname,
+    rsbuildConfig: {
+      plugins: [
+        pluginPublint({
+          throwOn: 'never',
+        }),
+      ],
+    },
+  });
+
+  await expect(rsbuild.build()).resolves.toBeTruthy();
+
+  expect(getPublintLogs(logs)).toEqual(allLogs);
+  restore();
 });
