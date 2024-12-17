@@ -38,107 +38,112 @@ export const pluginPublint = (
       return;
     }
 
-    api.onAfterBuild(async () => {
-      const { publint } = await import('publint');
-      const { formatMessage } = await import('publint/utils');
+    api.onAfterBuild({
+      handler: async () => {
+        const { publint } = await import('publint');
+        const { formatMessage } = await import('publint/utils');
 
-      const mergedOptions = {
-        pkgDir: api.context.rootPath,
-        ...options.publintOptions,
-      };
-      const { messages } = await publint(mergedOptions);
+        const mergedOptions = {
+          pkgDir: api.context.rootPath,
+          ...options.publintOptions,
+        };
+        const { messages } = await publint(mergedOptions);
 
-      const pkg = JSON.parse(
-        await fs.readFile(join(mergedOptions.pkgDir, 'package.json'), 'utf8'),
-      );
-
-      const formatted: Record<string, (string | undefined)[]> = {
-        errors: [],
-        warnings: [],
-        suggestions: [],
-      };
-
-      for (const message of messages) {
-        if (message.type === 'error') {
-          formatted.errors.push(formatMessage(message, pkg));
-        } else if (message.type === 'warning') {
-          formatted.warnings.push(formatMessage(message, pkg));
-        } else {
-          formatted.suggestions.push(formatMessage(message, pkg));
-        }
-      }
-
-      if (
-        formatted.errors.length === 0 &&
-        formatted.warnings.length === 0 &&
-        formatted.suggestions.length === 0
-      ) {
-        logger.info(color.green('Publint passed.'));
-      }
-
-      if (formatted.errors.length > 0) {
-        logger.error(
-          color.red(
-            `Publint found ${color.bold(formatted.errors.length)} errors:`,
-          ),
+        const pkg = JSON.parse(
+          await fs.readFile(join(mergedOptions.pkgDir, 'package.json'), 'utf8'),
         );
-        for (const message of formatted.errors) {
-          if (message) {
-            logger.error(message);
+
+        const formatted: Record<string, (string | undefined)[]> = {
+          errors: [],
+          warnings: [],
+          suggestions: [],
+        };
+
+        for (const message of messages) {
+          if (message.type === 'error') {
+            formatted.errors.push(formatMessage(message, pkg));
+          } else if (message.type === 'warning') {
+            formatted.warnings.push(formatMessage(message, pkg));
+          } else {
+            formatted.suggestions.push(formatMessage(message, pkg));
           }
         }
-        // empty line
-        console.log();
-      }
 
-      if (formatted.warnings.length > 0) {
-        logger.warn(
-          color.yellow(
-            `Publint found ${color.bold(formatted.warnings.length)} warnings:`,
-          ),
-        );
-        for (const message of formatted.warnings) {
-          if (message) {
-            logger.warn(message);
+        if (
+          formatted.errors.length === 0 &&
+          formatted.warnings.length === 0 &&
+          formatted.suggestions.length === 0
+        ) {
+          logger.info(color.green('Publint passed.'));
+        }
+
+        if (formatted.errors.length > 0) {
+          logger.error(
+            color.red(
+              `Publint found ${color.bold(formatted.errors.length)} errors:`,
+            ),
+          );
+          for (const message of formatted.errors) {
+            if (message) {
+              logger.error(message);
+            }
+          }
+          // empty line
+          console.log();
+        }
+
+        if (formatted.warnings.length > 0) {
+          logger.warn(
+            color.yellow(
+              `Publint found ${color.bold(formatted.warnings.length)} warnings:`,
+            ),
+          );
+          for (const message of formatted.warnings) {
+            if (message) {
+              logger.warn(message);
+            }
+          }
+          // empty line
+          console.log();
+        }
+
+        if (formatted.suggestions.length > 0) {
+          logger.info(
+            color.cyan(
+              `Publint found ${color.bold(formatted.suggestions.length)} suggestions:`,
+            ),
+          );
+          for (const message of formatted.suggestions) {
+            if (message) {
+              logger.info(message);
+            }
           }
         }
-        // empty line
-        console.log();
-      }
 
-      if (formatted.suggestions.length > 0) {
-        logger.info(
-          color.cyan(
-            `Publint found ${color.bold(formatted.suggestions.length)} suggestions:`,
-          ),
-        );
-        for (const message of formatted.suggestions) {
-          if (message) {
-            logger.info(message);
+        const shouldThrow = () => {
+          switch (throwOn) {
+            case 'suggestion':
+              return (
+                formatted.suggestions.length > 0 ||
+                formatted.warnings.length > 0 ||
+                formatted.errors.length > 0
+              );
+            case 'warning':
+              return (
+                formatted.warnings.length > 0 || formatted.errors.length > 0
+              );
+            case 'error':
+              return formatted.errors.length > 0;
+            case 'never':
+              return false;
           }
-        }
-      }
+        };
 
-      const shouldThrow = () => {
-        switch (throwOn) {
-          case 'suggestion':
-            return (
-              formatted.suggestions.length > 0 ||
-              formatted.warnings.length > 0 ||
-              formatted.errors.length > 0
-            );
-          case 'warning':
-            return formatted.warnings.length > 0 || formatted.errors.length > 0;
-          case 'error':
-            return formatted.errors.length > 0;
-          case 'never':
-            return false;
+        if (shouldThrow()) {
+          throw new Error('Publint failed!');
         }
-      };
-
-      if (shouldThrow()) {
-        throw new Error('Publint failed!');
-      }
+      },
+      order: 'post',
     });
   },
 });
