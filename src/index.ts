@@ -39,7 +39,12 @@ export const pluginPublint = (
     }
 
     api.onAfterBuild({
-      handler: async () => {
+      handler: async ({ isFirstCompile }) => {
+        // Only run on the first compile in watch mode, or on a single build
+        if (!isFirstCompile) {
+          return;
+        }
+
         const { publint } = await import('publint');
         const { formatMessage } = await import('publint/utils');
 
