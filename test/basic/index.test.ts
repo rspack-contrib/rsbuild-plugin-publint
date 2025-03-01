@@ -17,13 +17,12 @@ const getPublintLogs = (logs: string[]) => {
 
 const allLogs = [
   'error   Publint found 3 errors:',
-  'error   pkg.exports["."].types should be the first in the object as required by TypeScript.',
+  'error   pkg.exports["."].types should be the first in the object as conditions are order-sensitive so it can be resolved by TypeScript.',
   'error   pkg.exports["."].import is ./dist/index.js but the file does not exist.',
   'error   pkg.exports["."].types is ./dist/index.d.ts but the file does not exist.',
-  'warn    Publint found 1 warnings:',
-  `warn    pkg.repository.url is git@github.com:test/test.git which isn't a valid git URL. A valid git URL is usually in the form of "git+https://example.com/user/repo.git".`,
-  'info    Publint found 1 suggestions:',
-  'info    The package does not specify the "type" field. NodeJS may attempt to detect the package type causing a small performance hit. Consider adding "type": "commonjs".',
+  'info    Publint found 2 suggestions:',
+  'info    The package does not specify the "type" field. Node.js may attempt to detect the package type causing a small performance hit. Consider adding "type": "commonjs".',
+  `info    pkg.repository.url is git@github.com:test/test.git but could be a full git URL like "git+ssh://git@github.com/test/test.git".`,
 ];
 
 test('should run publint as expected', async () => {
