@@ -3,10 +3,7 @@
   "ignorePaths": [],
   "dictionaryDefinitions": [],
   "dictionaries": [],
-  "words": [
-    "publint",
-    "rslib"
-  ],
+  "words": ["publint", "rslib"],
   "ignoreWords": [],
   "import": []
 }
