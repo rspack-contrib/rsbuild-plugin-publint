@@ -39,7 +39,7 @@ export const pluginPublint = (
     }
 
     api.onAfterBuild({
-      handler: async ({ isFirstCompile }) => {
+      handler: async ({ isFirstCompile, isWatch }) => {
         // Only run on the first compile in watch mode, or on a single build
         if (!isFirstCompile) {
           return;
@@ -144,7 +144,7 @@ export const pluginPublint = (
           }
         };
 
-        if (shouldThrow()) {
+        if (shouldThrow() && !isWatch) {
           throw new Error('Publint failed!');
         }
       },
