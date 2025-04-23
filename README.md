@@ -95,6 +95,10 @@ Optional values:
 - `'suggestion'`: Throw on errors, warnings and suggestions.
 - `'never'`: Never throw an error.
 
+:::warning
+When running in watch mode, this plugin will print the error instead of throwing it.
+:::
+
 ## License
 
 [MIT](./LICENSE).
