@@ -1,6 +1,6 @@
 {
   "name": "rsbuild-plugin-publint",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": "https://github.com/rspack-contrib/rsbuild-plugin-publint",
   "license": "MIT",
   "type": "module",
