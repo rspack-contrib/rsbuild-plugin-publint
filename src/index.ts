@@ -82,10 +82,13 @@ export const pluginPublint = (
           logger.info(color.green('Publint passed.'));
         }
 
-        if (formatted.errors.length > 0) {
+        const errorsCount = formatted.errors.length;
+        if (errorsCount > 0) {
           logger.error(
             color.red(
-              `Publint found ${color.bold(formatted.errors.length)} errors:`,
+              `Publint found ${color.bold(errorsCount)} ${
+                errorsCount === 1 ? 'error' : 'errors'
+              }:`,
             ),
           );
           for (const message of formatted.errors) {
@@ -97,10 +100,13 @@ export const pluginPublint = (
           console.log();
         }
 
-        if (formatted.warnings.length > 0) {
+        const warningsCount = formatted.warnings.length;
+        if (warningsCount > 0) {
           logger.warn(
             color.yellow(
-              `Publint found ${color.bold(formatted.warnings.length)} warnings:`,
+              `Publint found ${color.bold(warningsCount)} ${
+                warningsCount === 1 ? 'warning' : 'warnings'
+              }:`,
             ),
           );
           for (const message of formatted.warnings) {
@@ -112,10 +118,13 @@ export const pluginPublint = (
           console.log();
         }
 
-        if (formatted.suggestions.length > 0) {
+        const suggestionsCount = formatted.suggestions.length;
+        if (suggestionsCount > 0) {
           logger.info(
             color.cyan(
-              `Publint found ${color.bold(formatted.suggestions.length)} suggestions:`,
+              `Publint found ${color.bold(suggestionsCount)} ${
+                suggestionsCount === 1 ? 'suggestion' : 'suggestions'
+              }:`,
             ),
           );
           for (const message of formatted.suggestions) {
